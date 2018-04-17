@@ -2,3 +2,8 @@
 	path = bmya/l10n-chile
 	url = git@github.com:bmya/l10n-chile.git
 	branch = 10.0
+
+[submodule "OCA/mis-builder"]
+	path = OCA/mis-builder
+	url = git@github.com:OCA/mis-builder.git
+	branch = 10.0
