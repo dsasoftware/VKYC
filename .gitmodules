@@ -7,3 +7,8 @@
 	path = OCA/mis-builder
 	url = git@github.com:OCA/mis-builder.git
 	branch = 10.0
+
+[submodule "VKYC/Plantillas_VKYC_01"]
+	path = VKYC/Plantillas_VKYC_01
+	url = git@github.com:VKYC/Plantillas_VKYC_01.git
+	branch = master
