@@ -12,3 +12,8 @@
 	path = VKYC/Plantillas_VKYC_01
 	url = git@github.com:VKYC/Plantillas_VKYC_01.git
 	branch = master
+
+[submodule "VKYC/ReportesProfesionales"]
+	path = VKYC/ReportesProfesionales
+	url = git@github.com:VKYC/ReportesProfesionales.git
+	branch = master
