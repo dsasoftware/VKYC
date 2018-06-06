@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="shine_purchasequotation_layout_document">
+			
+			<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+			
+			<div class="header">
+				<div class="row">
+					
+					<div class="col-xs-12"   >
+						<img t-if="o.company_id.logo" class="center-block" t-att-src="'data:image/png;base64,%s'
+							% o.company_id.logo" style="max-height: 150px; " />
+												<br/>
+						<span class="text-center center-block"  t-field="o.company_id.name" />
+					</div>
+					
+				</div>
+				<div class="row">
+					<t t-if="doc.company_id.watermark_selection == 'custom_name'  and doc.company_id.add_watermark == True ">
+						<div style="position:absolute;opacity:0.11;z-index:1000;-webkit-transform:rotate(-45deg);width:100%;
+							 height:100%; top: 450px; ">
+							<p  t-field="doc.company_id.custom_watermark_name" 
+							style="font-size:250px; "/>
+						</div>
+					</t>
+					<t t-if="doc.company_id.watermark_selection == 'company_logo' and doc.company_id.add_watermark == True ">
+							<div style="position:absolute;opacity:0.11;z-index:1000;-webkit-transform:rotate(-45deg);width:100%;
+							 height:100%; top: 400px;">
+								<img t-att-src="'data:image/png;base64,%s' % doc.company_id.logo" 
+								style="height:500px;"
+								/>
+								
+							</div>
+						</t>
+						
+				</div>
+			</div>
+			
+			
+			
+			<div class="page">
+				<div class="oe_structure"/>
+				<br/>
+				
+				<div class="row">
+					<br />
+				</div>
+				<div class="row">
+					
+					<div class="col-xs-12 " >
+						<h2>
+							<span class="text-center center-block" t-attf-style="color:{{data['primary_color']}}!important;"
+								>
+							<span>Purchase Quotation:</span>
+							<span t-field="o.name"/>
+							
+								
+							</span>
+						</h2>
+					</div>
+					
+				</div>
+				<div class="row">
+					
+					<div class="col-xs-12 " >
+						<span  class="text-center center-block"  style="font-size:12px">
+							<t t-if="o.partner_ref">
+								<strong>Your Reference :</strong>
+								<span t-field="o.partner_ref"/>
+							</t>
+							|
+							<t t-if="o.date_order" >
+								<strong >Order Date :</strong>
+								<span t-field="o.date_order"/>
+							</t>
+							<br />
+							<t t-if="o.date_planned" >
+								<strong>Scheduled Date :</strong>
+								<span t-field="o.date_planned"/>
+							</t>
+							|
+							<t t-if="o.fiscal_position_id">
+								<strong>Fiscal Position:</strong>
+								<span t-field="o.fiscal_position_id"/>
+							</t>
+							
+							
+						</span>
+						
+					</div>
+					
+				</div>
+				<br />
+				<div class="row">
+					
+					<div class="col-xs-6 text-left" >
+						<h5 >
+							<span t-attf-style="color:{{data['primary_color']}}!important;" >
+								
+								<i class="fa fa-map-marker" aria-hidden="true"/>
+									<strong>Vendor Address</strong>
+							</span>
+							<span>
+								<div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address",
+								"name","phone", "fax"], "no_marker": True, "phone_icons": True}' />
+								<p t-if="o.partner_id.vat">
+									VAT:
+									<span t-field="o.partner_id.vat"/>
+								</p>
+							</span>
+						</h5>
+					</div>
+					<div class="col-xs-6 text-right" >
+						<h5>
+							<span t-attf-style="color:{{data['primary_color']}}!important;" >
+									<i class="fa fa-truck" aria-hidden="true">
+									</i>
+									<strong>Shipping Address</strong>
+							</span>
+							<span >
+								<t t-if="o.dest_address_id">
+									<div t-field="o.dest_address_id" t-options='{"widget": "contact", "fields": ["address",
+										"name", "phone", "fax"], "no_marker": True, "phone_icons": True}'/>
+								</t>
+								<t t-if="not o.dest_address_id and o.picking_type_id and o.picking_type_id.warehouse_id">
+									
+									<div t-field="o.picking_type_id.warehouse_id.partner_id" t-options='{"widget": "contact",
+										"fields": ["address","name","phone", "fax"], "no_marker": True, "phone_icons":
+										True}'/>
+								</t>
+							</span>
+						</h5>
+					</div>
+					
+				</div>
+				
+				
+				
+				<br />
+				
+				
+			
+				
+				
+				<br />
+						<div class="row">
+					
+					<div  class="col-xs-12 ">
+						<table class="table table-hover"  style=" table-layout:fixed;">
+							<thead t-attf-style=" background-color:{{data['primary_color']}}!important; color:{{data['sale_font_color']}}!important;
+								">
+								<tr >
+									<th >
+										<i class="fa fa-list-ol" aria-hidden="true"/>
+										Item
+									</th>
+									<th >
+										<strong>
+											<i class="fa fa-th-large" aria-hidden="true"/>
+											Description
+										</strong>
+									</th>
+									<t t-if="o.company_id.add_product_image">
+										<th  class="text-center">
+											<i class="fa fa-picture-o" aria-hidden="true"/>
+											Product Image
+										</th>
+									</t>
+									<th  class="text-center">
+										<strong>
+											<i class="fa fa-calendar" aria-hidden="true"/>
+											Expected Date
+										</strong>
+									</th>
+									<th  class="text-right">
+										<strong>
+											<i class="fa fa-sort-amount-asc" aria-hidden="true"/>
+											Qty
+										</strong>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<t t-set="j" t-value="1" />
+								<t t-foreach="o.order_line" t-as="l">
+									<tr>
+										<td>
+											<span t-esc="j" />
+											<t t-set="j" t-value="j+1" />
+										</td>
+										<td>
+											<span t-field="l.name"/>
+										</td>
+										<t t-if="o.company_id.add_product_image">
+											<td>
+												<span t-field="l.product_id.image" t-field-options='{"widget": "image"}'/>
+											</td>
+										</t>
+										<td >
+											<span t-field="l.date_planned"/>
+										</td>
+										<td class="text-right">
+											<span t-field="l.product_qty"/>
+											<span t-field="l.product_uom.name" groups="product.group_uom"/>
+										</td>
+									</tr>
+								</t>
+							</tbody>
+							
+						</table>
+						<div t-attf-style=" border: 1px !important; border-color:{{data['primary_color']}}!important;
+							border-style: groove !important; "/>
+						
+						<br />
+					</div>
+				</div>
+				<div class="row">
+				
+					
+					<div class="col-xs-6">
+						<table>
+							<tr>
+								<td>
+									<strong>Note:</strong>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span t-field="o.notes"/>
+									<br />
+									<p t-if="o.payment_term_id">
+										<strong>Payment Term :</strong>
+										<span t-field="o.payment_term_id"/>
+									</p>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+					<div class="row">
+					<div class="col-xs-4 pull-right"  >
+						<t t-if="doc.company_id.add_signature == True">
+						<span>Signature :</span>
+						<span t-field="doc.company_id.signature_logo" t-field-options='{"widget": "image","style":"width: 100px; height: 100px; margin-right: 10px; display:inline" }'/>
+				</t></div></div>
+					
+				<div class="oe_structure"/>
+				
+				
+				
+				
+			</div>
+			
+			
+					
+			
+			<div class="footer">
+				
+				<div class="row" >
+					<div t-attf-style=" border: 1px !important; border-color:#000000 !important;
+							border-style: groove !important; "/>
+					<br />
+					<div class="col-xs-5 ">
+						<t t-if="doc.company_id.partner_id.website">
+							<i class="fa fa-share" aria-hidden="true"/>
+							<span t-field="doc.company_id.website"/>
+						</t>
+					</div>
+					<div class="col-xs-2 text-center "  >
+						<cenetr>
+							Page:
+							<span class="page"/>
+							/
+							<span class="topage"/>
+						</cenetr>
+					</div>
+					<div class="col-xs-5 text-right ">
+						<t t-if="doc.company_id.partner_id.phone">
+							<i class="fa fa-phone" aria-hidden="true"/>
+							<span  t-field="doc.company_id.phone"/>
+							<br/>
+						</t>
+						<t t-if="doc.company_id.partner_id.fax">
+							<i class="fa fa-fax" aria-hidden="true"/>
+							<span t-field="doc.company_id.fax"/>
+							<br/>
+						</t>
+						<t t-if="doc.company_id.partner_id.email">
+							<i class="fa fa-envelope" aria-hidden="true"/>
+							<span  t-field="
+								doc.company_id.email"/>
+							<br/>
+						</t>
+					</div>
+					
+					<t t-if="doc.company_id.custom_footer">
+						<span t-raw="doc.company_id.rml_footer"/>
+					</t>
+				</div>
+			</div>
+			
+			
+			
+			
+		</template>
+		
+		
+	</data>
+</openerp>
+					

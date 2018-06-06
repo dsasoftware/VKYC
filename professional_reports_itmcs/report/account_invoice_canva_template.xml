@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="canva_accountinvoice_layout_document">
+			<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+			
+			
+			<div class="header">
+				<div class="row">
+					
+					<div class="col-xs-6 text-left" >
+						<img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo"
+						style="max-height: 150px;"  class="text-right" />
+					</div>
+					<div class="col-xs-6 text-right">
+						
+						<div t-attf-style="color:{{data['primary_color']}}!important;" t-field="o.company_id.partner_id"
+							/>
+						
+						<div t-field="o.company_id.partner_id" t-field-options='{"widget": "contact", "fields":
+							["address", "phone"], "no_marker": true}' />
+						
+					</div>
+				</div>
+				<div class="row">
+					<t t-if="doc.company_id.watermark_selection == 'custom_name'  and doc.company_id.add_watermark == True ">
+						<div style="position:absolute;opacity:0.11;z-index:1000;-webkit-transform:rotate(-45deg);width:100%;
+							 height:100%; top: 450px; ">
+							<p  t-field="doc.company_id.custom_watermark_name" 
+							style="font-size:250px; "/>
+						</div>
+					</t>
+					<t t-if="doc.company_id.watermark_selection == 'company_logo' and doc.company_id.add_watermark == True ">
+							<div style="position:absolute;opacity:0.11;z-index:1000;-webkit-transform:rotate(-45deg);width:100%;
+							 height:100%; top: 400px;">
+								<img t-att-src="'data:image/png;base64,%s' % doc.company_id.logo" 
+								style="height:500px;"
+								/>
+								
+							</div>
+						</t>
+						
+				</div>
+			</div>
+			
+			
+			
+			<div class="page">
+				<div class="oe_structure"/>
+				<br/>
+				
+				
+				
+				<div class="row">
+					<div class="col-xs-12 ">
+						<div t-attf-style=" border: 1px !important; border-color:{{data['primary_color']}}!important; border-style: groove !important; "/>
+						<br />	
+					</div>
+						
+					<div class="col-xs-6 text-left">
+						
+						<span> Invoice Address </span>
+						<h6><div t-attf-style="color:{{data['primary_color']}}!important;" t-field="o.partner_id"
+							/></h6>
+						<div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address",
+							"phone", "fax"], "no_marker": True, "phone_icons": True}'/>
+						<span t-if="o.partner_id.vat">
+							TIN:
+							<span t-field="o.partner_id.vat"/>
+						</span>
+						
+						
+					</div>
+					<div class="col-xs-6 text-right" >
+						
+						<table class="pull-right" >
+							<tbody >
+								<tr t-attf-style="background-color:{{data['primary_color']}}!important;color:{{data['sale_font_color']}}!important;
+							 " >
+										
+									<td style="padding:10px;!important;" >
+										<h5>
+											<span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice  #</span>
+											<span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA #</span>
+											<span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice #</span>
+											<span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice  #</span>
+											<span t-if="o.type == 'out_refund'">Refund :</span>
+											<span t-if="o.type == 'in_refund'">Vendor Refund :</span>
+											<span t-if="o.type == 'in_invoice'">Vendor Bill :</span>
+											<span t-field="o.number"/>
+										</h5>
+									</td>
+									
+								</tr>
+								<tr t-attf-style="background-color:{{data['primary_color']}}!important;color:{{data['sale_font_color']}}!important;
+							 " >
+									<td style="padding:10px;!important;" t-if="o.date_invoice">
+										Invoice Date :
+										<span t-field="o.date_invoice"/>
+									</td>
+									</tr>
+									<tr t-attf-style="background-color:{{data['primary_color']}}!important;color:{{data['sale_font_color']}}!important;
+							 " >
+									<td style="padding:10px;!important;" t-if="o.date_due and o.type == 'out_invoice'
+										and (o.state == 'open' or o.state == 'paid')">
+										Due Date:
+										<span t-field="o.date_due"/>
+									</td>
+									</tr>
+									<tr t-attf-style="background-color:{{data['primary_color']}}!important;color:{{data['sale_font_color']}}!important;
+							 " >
+									<td style="padding:10px;!important;" t-if="o.origin">
+										Source Doc:
+										<span style="border: 1px !important;border-color: #fff !important;" t-field="o.origin"/>
+									</td>
+									
+									
+								</tr>
+									<tr t-attf-style="background-color:{{data['primary_color']}}!important;color:{{data['sale_font_color']}}!important;
+							 " >
+									
+									<td t-if="o.fiscal_position_id" style="padding:10px;!important;">
+										Fiscal Position:
+										<br />
+										<span style="border: 1px !important;border-color: #fff !important;" t-field="o.fiscal_position_id"/>
+									</td>
+								</tr>
+									<tr t-attf-style="background-color:{{data['primary_color']}}!important;color:{{data['sale_font_color']}}!important;
+							 " >
+									
+									<td t-if="o.name" style="padding:10px;!important;">
+										Reference:
+										<br/>
+										<span style="border: 1px !important;border-color: #fff !important;" t-field="o.name"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+									</div>
+						<div class="col-xs-12 ">
+							<br />
+				<div t-attf-style=" border: 1px !important; border-color:{{data['primary_color']}}!important; border-style: groove !important; "/>
+						</div>
+				</div>
+				
+				
+				
+				<br />
+				<div class="row">
+					<div  class="col-xs-12 ">
+						<t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+						<table class="table table-condensed able table-striped" style=" table-layout:fixed;border-color:
+							#fff !important;">
+							<thead t-attf-style="background-color:{{data['primary_color']}}!important; border:1px
+								!important; border-style: solid !important; border-color: #fff !important
+								; color:{{data['sale_font_color']}}!important; width:40px;">
+								<tr>
+									
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; ">
+										<i class="fa fa-list-ol" aria-hidden="true"/>
+										Item
+									</th>
+									
+									<th style="border: 1px !important; border-style: solid !important;border-color: #fff
+										!important;">
+										<i class="fa fa-th-large" aria-hidden="true"/>
+										Description
+									</th>
+									<t t-if="o.company_id.add_product_image">
+										<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+											!important; " class="text-center">
+											<i class="fa fa-picture-o" aria-hidden="true"/>
+											Product Image
+										</th>
+									</t>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " class="text-right">
+										<i class="fa fa-sort-amount-asc" aria-hidden="true"/>
+										Quantity
+									</th>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " class="text-right">
+										<i class="fa fa-gg-circle" aria-hidden="true"/>
+										Unit Price
+									</th>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " t-if="display_discount" class="text-right">
+										<i class="fa fa-percent" aria-hidden="true"/>
+										Disc.(%)
+									</th>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " class="text-right">
+										<i class="fa fa-tags" aria-hidden="true"/>
+										Taxes
+									</th>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " class="text-right">
+										<i class="fa fa-cc-mastercard" aria-hidden="true"/>
+										Tax Excluded Price
+									</th>
+								</tr>
+							</thead>
+							<tbody class="invoice_tbody">
+								<t t-set="j" t-value="1" />
+								<t t-foreach="o.invoice_line_ids" t-as="l">
+									<tr>
+										<td style="border: 1px !important;border-color: #fff !important;">
+											<span t-esc="j" />
+											<t t-set="j" t-value="j+1" />
+										</td>
+										<td style="border: 1px !important;border-color: #fff !important;">
+											<span t-field="l.name"/>
+										</td>
+										<t t-if="o.company_id.add_product_image">
+											<td style="border: 1px !important;border-color: #fff !important;">
+												<span t-field="l.product_id.image" t-field-options='{"widget": "image"}'/>
+											</td>
+										</t>
+										<td style="border: 1px !important;border-color: #fff !important;" class="text-right">
+											<span t-field="l.quantity"/>
+											<span t-field="l.uom_id"  groups="product.group_uom"/>
+										</td>
+										<td style="border: 1px !important;border-color: #fff !important;" class="text-right">
+											<span t-field="l.price_unit"/>
+										</td>
+										<td style="border: 1px !important;border-color: #fff !important;" t-if="display_discount"
+											class="text-right" >
+											<span t-field="l.discount"/>
+										</td>
+										<td style="border: 1px !important;border-color: #fff !important;" class="text-right">
+											<span t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
+										</td>
+										<td style="border: 1px !important;border-color: #fff !important;" class="text-right"
+											>
+											<span t-field="l.price_subtotal" t-options='{"widget": "monetary", "display_currency":
+												o.currency_id}'/>
+										</td>
+									</tr>
+								</t>
+							</tbody>
+							
+						</table>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-4 pull-right">
+						<table class="table table-condensed">
+							<tr class="border-black">
+								<td>
+									<strong>Total Without Taxes</strong>
+								</td>
+								<td class="text-right">
+									<span t-field="o.amount_untaxed" t-field-options='{"widget": "monetary", "display_currency":
+										"o.currency_id"}' />
+								</td>
+							</tr>
+							<t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
+								<tr>
+									<td>Taxes</td>
+									<td class="text-right">
+										<span t-esc="amount_by_group[1]" t-options='{"widget": "monetary", "display_currency":
+											o.currency_id}'/>
+									</td>
+								</tr>
+							</t>
+							
+							<tr class="border-black">
+								<td>
+									<strong>Total</strong>
+								</td>
+								<td class="text-right">
+									<span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency":
+										"o.currency_id"}' />
+								</td>
+							</tr>
+							<tr>
+								<td>Amount Due</td>
+								<td class="text-right">
+									<span t-field="o.residual" />
+								</td>
+							</tr>
+							<tr>
+								<td>Payment Status</td>
+								<td class="text-center">
+									<span t-field="o.state" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+					
+					
+					
+			<div class="row" >
+				<div  class="col-xs-12 ">
+					<br/>	
+						<div t-attf-style=" border: 1px !important;  border-style: groove !important; "/>
+						
+			</div></div>
+					
+					<div class="row">
+						
+						<div  class="col-xs-12 " t-if="o.tax_line_ids">
+						
+						<table class="table table-condensed able table-striped" style=" table-layout:fixed;border-color:
+							#fff !important;">
+							<thead t-attf-style="background-color:{{data['primary_color']}}!important; border:1px
+								!important; border-style: solid !important; border-color: #fff !important
+								; color:{{data['sale_font_color']}}!important; width:40px;">
+								<tr>
+									<th  style=" border-color: #fff !important; " >Item</th>
+									<th  style=" border-color: #fff !important; "  >Taxes</th>
+									<th  style=" border-color: #fff !important; "  >Amount</th>
+								</tr>
+							</thead>
+							<tbody class="invoice_tbody">
+								<t t-set="i" t-value="1" />
+								<t t-foreach="o.tax_line_ids" t-as="t">
+									<tr>
+										<td style="border: 1px !important;border-color: #fff !important;">
+											<span t-esc="i" />
+											<t t-set="i" t-value="i+1" />
+										</td>
+										<td style="border: 1px !important;border-color: #fff !important;">
+											<span t-field="t.name" />
+										</td>
+										<td style="border: 1px !important;border-color: #fff !important;">
+											<span t-field="t.amount" t-field-options='{"widget": "monetary", "display_currency":
+												"o.currency_id"}' />
+										</td>
+										
+									</tr>
+								</t>
+							</tbody>
+							
+						</table>
+						</div>
+						<div  class="col-xs-6">
+						
+						<table class="table table-condensed">
+							<tr>
+								<td>
+									<strong>Comment:</strong>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<p t-if="o.comment">
+										<span t-field="o.comment"/>
+									</p>
+									
+									<p t-if="o.payment_term_id">
+										<span t-field="o.payment_term_id.note"/>
+									</p>
+									<p t-if="o.fiscal_position_id.note">
+										<strong>Fiscal Position Remark:</strong>
+										<span t-field="doco.fiscal_position_id.note"/>
+									</p>
+									
+								</td>
+							</tr>
+						</table>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col-xs-4 pull-right"  >
+						<t t-if="doc.company_id.add_signature == True">
+						<span>Signature :</span>
+						<span t-field="doc.company_id.signature_logo" t-field-options='{"widget": "image","style":"width: 100px; height: 100px; margin-right: 10px; display:inline" }'/>
+				</t></div></div>
+							
+							
+				
+				<div class="oe_structure"/>
+			</div>
+			
+			
+			<div class="footer">
+				<div class="row" >
+					<div  class="col-xs-12 ">
+						<table class="table" t-attf-style="background-color:{{data['primary_color']}}!important;
+							color:{{data['sale_font_color']}}!important; ">
+							<tr  >
+								<td class="text-left"  >
+									<div t-field="o.company_id.partner_id" t-field-options='{"widget": "contact", "fields":
+										["address"], "no_marker": true}' style="display:inline-block;"/>
+								</td>
+								<td class="text-center"  >
+									<cenetr>
+										Page:
+										<span class="page"/>
+										/
+										<span class="topage"/>
+									</cenetr>
+								</td>
+								<td class="text-right" >
+									<t t-if="o.company_id.partner_id.phone">
+										Phone:
+										<span t-field="o.company_id.phone"/>
+										<br/>
+									</t>
+									<t t-if="o.company_id.partner_id.fax">
+										Fax:
+										<span t-field="o.company_id.fax"/>
+										<br/>
+									</t>
+									<t t-if="o.company_id.partner_id.email">
+										Email:
+										<span t-field=" o.company_id.email"/>
+										<br/>
+									</t>
+									<t t-if="o.company_id.partner_id.website">
+										Website:
+										<span t-field="o.company_id.website"/>
+									</t>
+								</td>
+							</tr>
+						</table>
+						<t t-if="o.company_id.custom_footer">
+							<span t-raw="o.company_id.rml_footer"/>
+						</t>
+					</div>
+				</div>
+			</div>
+			
+		</template>
+		
+		
+		<template id="canva_accountinvoice_layout_document_duplicate" inherit_id="professional_reports_itmcs.canva_accountinvoice_layout_document"
+			primary="True">
+			<xpath expr="//h5" position="replace">
+				<h5>
+					<span>Duplicate:</span>
+					<span t-if="o.type == 'out_refund'">refund</span>
+					<span t-if="o.type == 'out_invoice'">invoice</span>
+					<span t-field="o.number"/>
+				</h5>
+			</xpath>
+		</template>
+		
+		
+	</data>
+</openerp>
