@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="classic_stock_layout_document">
+			<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+			<div class="header">
+				<div class="row">
+					<!--<p style="background-color:#1FB5C3 !important;">drtf</p>-->
+					<center>
+						<img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo"
+							style="max-height:110px;" />
+					</center>
+					<br/>
+					<center>
+						<strong>
+							<span style="font-size:20px" t-field="o.company_id.name"/>
+						</strong>
+					</center>
+				</div>
+				<div class="row">
+					<t t-if="doc.company_id.watermark_selection == 'custom_name'  and doc.company_id.add_watermark == True ">
+						<div style="position:absolute;opacity:0.11;z-index:1000;-webkit-transform:rotate(-45deg);width:100%;
+							 height:100%; top: 450px; ">
+							<p  t-field="doc.company_id.custom_watermark_name" 
+							style="font-size:250px; "/>
+						</div>
+					</t>
+					<t t-if="doc.company_id.watermark_selection == 'company_logo' and doc.company_id.add_watermark == True ">
+							<div style="position:absolute;opacity:0.11;z-index:1000;-webkit-transform:rotate(-45deg);width:100%;
+							 height:100%; top:500px;">
+								<img t-att-src="'data:image/png;base64,%s' % doc.company_id.logo" 
+								style="height:500px;"
+								/>
+								
+							</div>
+						</t>
+						
+				</div>
+			</div>
+			
+			<div class="page">
+				<div class="oe_structure"/>
+				<br/>
+				<div class="row">
+					<br/>
+					
+				</div>
+				<div class="row">
+					<div class="col-xs-12 "	>
+						
+						<table class="table table-condensed table table-striped" style=" table-layout:fixed;"
+							>
+							<tbody>
+								<tr t-attf-style="background-color:{{data['primary_color']}}!important; color:{{data['sale_font_color']}}!important;
+									">
+									<td style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; ">
+										<strong style="font-size:20px" t-if="o.move_lines and o.move_lines[0].partner_id and
+											o.move_lines[0].partner_id.id != o.partner_id.id">Delivery Address</strong>
+										
+										<strong style="font-size:20px" t-if="o.picking_type_id.code != 'internal' and (not
+											o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">Warehouse Address</strong>
+										<br/>
+										
+										<div t-field="o.move_lines[0].partner_id" t-options='{"widget": "contact", "fields":
+											["address", "name", "phone", "fax"], "no_marker": True, "phone_icons":
+											True}'/>
+										<div t-field="o.picking_type_id.warehouse_id.partner_id" t-options='{"widget": "contact",
+											"fields": ["address", "name", "phone", "fax"], "no_marker": True, "phone_icons":
+											True}'/>
+										
+										
+										
+									</td>
+									<td style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; ">
+										<strong style="font-size:20px" t-if="o.picking_type_id.code=='incoming' and o.partner_id">Vendor Address</strong>
+										<strong style="font-size:20px" t-if="o.picking_type_id.code=='internal' and o.partner_id">Warehouse Address</strong>
+										<strong style="font-size:20px" t-if="o.picking_type_id.code=='outgoing' and o.partner_id">Customer Address</strong>
+										
+										<br/>
+										<b>
+											<div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["name", "phone"],
+												"no_marker": True, "phone_icons": True}'/>
+											<p t-if="o.sudo().partner_id.vat">
+												VAT:
+												<span t-field="o.sudo().partner_id.vat"/>
+											</p>
+											
+										</b>
+									</td>
+									
+									<td style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; ">
+										<span style="font:25px lucida-console,sans-serif
+									!important;" >Picking Operations:</span>
+										<span style="font:25px lucida-console,sans-serif !important;" t-field="o.name" class="mt0"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 "	>
+						
+						
+						<table class="table table-condensed table table-striped" style=" table-layout:fixed;"
+							>
+							<thead t-attf-style="background-color:{{data['primary_color']}}!important; border:1px
+								!important; border-style: solid !important; border-color: #fff !important
+								; color:{{data['sale_font_color']}}!important; width:40px;">
+								<tr>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " t-if="o.origin" >Order (Origin)</th>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " >State</th>
+									
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; ">Commitment Date</th>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " name="td_sched_date_h">Scheduled Date</th>
+									
+								</tr>
+							</thead>
+							<tbody style=" background-color: #3E384C;border-color: #fff !important;" >
+								<tr>
+									<td t-if="o.origin" style="border: 1px !important;border-style: solid !important;border-color:
+										#fff !important; ">
+										<span t-field="o.origin"/>
+									</td>
+									<td style="border: 1px !important;border-style: solid !important; border-color: #fff
+										!important;">
+										<span t-field="o.state"/>
+									</td>
+									<td style="border: 1px !important;border-style: solid !important;border-color: #fff
+										!important;">
+										<span t-field="o.date"/>
+									</td>
+									<td name="td_sched_date" style="border: 1px !important;border-style: solid !important;border-color:
+										#fff !important;">
+										<span t-field="o.min_date"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<br />
+				
+				
+				<div class="row">
+					<div class="col-xs-12 "	>
+						
+						<table t-if="o.pack_operation_ids" class="table table-condensed able table-striped"
+							style=" table-layout:fixed;border-color: #fff !important;">
+							<t t-set="has_barcode" t-value="any([l.product_id and l.product_id.sudo().barcode
+								or l.package_id for l in o.pack_operation_ids])"/>
+							<t t-set="has_serial_number" t-value="o.pack_operation_ids.filtered('pack_lot_ids')"
+								groups="stock.group_production_lot"/>
+							
+							<thead t-attf-style="background-color:{{data['primary_color']}}!important; border:1px
+								!important; border-style: solid !important; border-color: #fff !important
+								; color:{{data['sale_font_color']}}!important; width:40px;">
+								<tr>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; ">
+										<i class="fa fa-list-ol" aria-hidden="true"/>
+										Item
+									</th>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " >
+										<strong>
+											<i class="fa fa-cart-arrow-down" aria-hidden="true"/>
+											Product
+										</strong>
+									</th>
+									<t t-if="o.company_id.add_product_image">
+										<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+											!important; " class="text-center">
+											<i class="fa fa-picture-o" aria-hidden="true"/>
+											Product Image
+										</th>
+									</t>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " class="text-right">
+										<strong>
+											<i class="fa fa-sort-amount-asc" aria-hidden="true"/>
+											Quantity
+										</strong>
+									</th>
+									<t t-if="o.picking_type_id.code != 'incoming'">
+										<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+											!important; " >
+											<strong>
+												<i class="fa fa-arrow-circle-down" aria-hidden="true"/>
+												Source
+											</strong>
+										</th>
+									</t>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " t-if="has_barcode" class="text-center">
+										<strong>
+											<i class="fa fa-barcode" aria-hidden="true"/>
+											Barcode
+										</strong>
+									</th>
+									<th style=" border: 1px !important; border-style: solid !important;border-color: #fff
+										!important; " t-if="has_serial_number">
+										<strong>
+											<i class="fa fa-sort-numeric-asc" aria-hidden="true"/>
+											Lot/Serial Number
+										</strong>
+									</th>
+									<th t-if="o.picking_type_id.code != 'outgoing'" style=" border: 1px !important; border-style:
+										solid !important;border-color: #fff !important; " >
+										<strong>
+											<i class="fa fa-th-large" aria-hidden="true"/>
+											Destination
+										</strong>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<t t-set="j" t-value="1" />
+								<t t-set="pack_operation_ids" t-value="o.pack_operation_ids"/>
+								<t groups="base.group_portal" t-set="pack_operation_ids" t-value="o.pack_operation_ids.sudo()"/>
+								
+								<t t-foreach="o.pack_operation_ids" t-as="l">
+									<tr>
+										<td style="border: 1px !important;border-color: #fff !important;">
+											<span t-esc="j" />
+											<t t-set="j" t-value="j+1" />
+										</td>
+										<td style="border: 1px !important;border-color: #fff !important;">
+											<span t-field="l.product_id"/>
+											<br/>
+											<span t-field="l.product_id.description_picking"/>
+											<t t-if="not l.product_id and l.package_id">
+												<span  t-field="l.package_id"/>
+											</t>
+											
+										</td>
+										<t t-if="o.company_id.add_product_image">
+											<td style="border: 1px !important;border-color: #fff !important;">
+												<span t-field="l.product_id.image" t-field-options='{"widget": "image"}'/>
+											</td>
+										</t>
+										<td style="border: 1px !important;border-color: #fff !important;" class="text-right">
+											<span t-field="l.product_qty"/>
+										</td>
+										<td t-if="o.picking_type_id.code != 'incoming'" style="border: 1px !important;border-color:
+											#fff !important;" class="text-right">
+											<span t-field="l.location_id"/>
+											<span t-if="l.package_id">:</span>
+											<span t-field="l.package_id"/>
+										</td>
+										<td t-if="has_barcode" style="border: 1px !important;border-color: #fff !important;"
+											class="text-right">
+											<span t-if="l.product_id and l.product_id.barcode">
+												<img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'
+													% ('Code128', l.product_id.barcode, 600, 100)" style="width:300px;height:50px"/>
+											</span>
+											<span t-if="l.package_id and not l.product_id">
+												<img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'
+													% ('Code128', l.package_id.name, 600, 100)" style="width:300px;height:50px"/>
+											</span>
+										</td>
+										<td t-if="has_serial_number" style="border: 1px !important;border-color: #fff !important;"
+											class="text-right">
+											
+											<table class="table table-condensed" t-if="l.pack_lot_ids">
+												<tr t-foreach="l.pack_lot_ids" t-as="packlot">
+													<td>
+														<span t-field="packlot.lot_id"/>
+														<t t-if="not packlot.lot_id">
+															<span t-field="packlot.lot_name"/>
+														</t>
+													</td>
+													<td>
+														<span t-field="packlot.qty"/>
+														<t t-if="o.picking_type_id.use_existing_lots and oo.state!='done'">
+															/
+															<span t-field="packlot.qty_todo"/>
+														</t>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td t-if="o.picking_type_id.code != 'outgoing'" style="border: 1px !important;border-color:
+											#fff !important;" class="text-right" >
+											<span t-field="l.location_dest_id"/>
+											<span t-if="l.result_package_id">:</span>
+											<span t-field="l.result_package_id"/>
+										</td>
+									</tr>
+								</t>
+							</tbody>
+							
+						</table>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					
+					
+					<div class="col-xs-6">
+						<table class="table table-condensed">
+							<tr>
+								<td>
+									<strong>Note:</strong>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<p t-if="o.state in ['draft', 'waiting', 'confirmed']">
+										You do not have any products reserved for this picking. Please click the 'Reserve'
+										button to check if products are available.
+									</p>
+									<span t-field="o.note"/>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+					<div class="row">
+					<div class="col-xs-4 pull-right"  >
+						<t t-if="doc.company_id.add_signature == True">
+						<span>Signature :</span>
+						<span t-field="doc.company_id.signature_logo" t-field-options='{"widget": "image","style":"width: 100px; height: 100px; margin-right: 10px; display:inline" }'/>
+				</t></div></div>
+					
+				<div class="oe_structure"/>
+				
+			</div>
+			
+			
+			<div class="footer">
+				<div class="row" >
+					<table class="table" t-attf-style=" background-color:{{data['primary_color']}} !important;
+						color:{{data['sale_font_color']}}!important; ">
+						<tr >
+							<td class="text-left"  >
+								<div t-field="o.company_id.partner_id" t-field-options='{"widget": "contact", "fields":
+									["address"], "no_marker": true}' style="display:inline-block;"/>
+							</td>
+							<td class="text-center"  >
+								<cenetr>
+									Page:
+									<span class="page"/>
+									/
+									<span class="topage"/>
+								</cenetr>
+							</td>
+							<td class="text-right" >
+								<t t-if="o.company_id.partner_id.phone">
+									Phone:
+									<span t-field="o.company_id.phone"/>
+									<br/>
+								</t>
+								<t t-if="o.company_id.partner_id.fax">
+									Fax:
+									<span t-field="o.company_id.fax"/>
+									<br/>
+								</t>
+								<t t-if="o.company_id.partner_id.email">
+									Email:
+									<span t-field=" o.company_id.email"/>
+									<br/>
+								</t>
+								<t t-if="o.company_id.partner_id.website">
+									Website:
+									<span t-field="o.company_id.website"/>
+								</t>
+							</td>
+						</tr>
+					</table>
+					<t t-if="o.company_id.custom_footer">
+						<span t-raw="o.company_id.rml_footer"/>
+					</t>
+				</div>
+			</div>
+			
+			
+			
+			
+		</template>
+		
+		
+	</data>
+</openerp>
